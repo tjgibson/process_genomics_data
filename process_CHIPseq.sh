@@ -7,10 +7,10 @@ input="local" # one of local or sra
 # what type of experiment generated your data
 assay_type="chip_w_input" # one of rna, atac, chip_w_input or chip_no_input
 molecule="dna" # one of dna, rna
-read_format="pe" # one of se, pe
+read_format="se" # one of se, pe
 
 # should read trimming be performed
-trim_reads=TRUE # logical
+trim_reads=FALSE # logical
 
 # what reference datasets should be used for analysis
 # ref_genome="/mnt/gluster/tjgibson2/genomes/ucsc_dm6_indexed.tar.gz"
@@ -22,6 +22,11 @@ return_bams=TRUE # logical
 return_unaligned=FALSE # logical
 return_bigwigs=TRUE # logical
 call_peaks=TRUE # logical
+
+# should output data be transferred to gluster or output to your home directory on the submit node?
+# WARNING: only transfer files back to the submit node if you are only transferring count tables, which are small. For large files such as BAMs, output files should be transferred back to gluster
+transfer_to_gluster=TRUE
+
 
 
 # setup ---------------------------------------------------------------------------------
@@ -52,9 +57,10 @@ gunzip fb_dmel-all-r6.26.gtf.gz
 
 # remove tar files
 rm ucsc_dm6_indexed.tar.gz 
-rm fb_dmel-all-r6.26.gtf.gz
+
+
 # file import for SRA files
-if [ input = "sra" ] ; then
+if [ $input = "sra" ] ; then
 	
 	# set file extension
 	ext=".fastq"
@@ -68,18 +74,14 @@ if [ input = "sra" ] ; then
 	for i in ${!files[@]}; do
 		f=${files[$i]}
 		
-		fasterq-dump ${f} -e ${rp}
+		./process_reads_software/sratoolkit.2.9.6-1-centos_linux64/bin/fasterq-dump ${f} -e ${rp}
 	done
 	
-else
-
-	echo "invalid input parameter. Input should be set to either 'local' or 'sra' "
-
 fi
 
 
 # file import for local files
-if [ input = "local" ] ; then
+if [ $input = "local" ] ; then
 
 	# check whether file extension is .fq.gz or .fastq.gz
 	if [[ $1 == *.fastq.gz ]] ; then
@@ -146,12 +148,13 @@ if [ input = "local" ] ; then
 		echo ${basepaths[*]}
 		echo ${basenames[*]}
 		
-		sample_name=(${basenames[0]%%_input*})
+		
 		
 	else
 		sample_name=${basenames[0]}
 	fi
 	
+	echo "sample_name: ${sample_name}"
 	
 	
 
@@ -213,15 +216,15 @@ for i in ${!files[@]}; do
 		# use NGmerge to trim paired-end data
 		if [ $read_format = "pe" ] ; then
 
-			(NGmerge-master/NGmerge -a -e 20 -u 41 -n ${rp} -v -1 ${bn}_1$ext -2 ${bn}_2$ext -o ${bn}_trimmed) 2>> ${sum_file}
-
+			(./process_reads_software/NGmerge-master/NGmerge -a -e 20 -u 41 -n ${rp} -v -1 ${bn}_1$ext -2 ${bn}_2$ext -o ${bn}_trimmed) 2>> ${sum_file}
+		
 	
 		fi
 		
 		# use trimmomatic to trim single-end data
 		if [ $read_format = "se" ] ; then
-			(java -jar Trimmomatic-0.39/trimmomatic-0.39.jar SE ${bn}${ext} ${bn}_trimmed$ext ILLUMINACLIP:./Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10:8:true LEADING:3 TRAILING:3 SLIDINGWINDOW:4:22 MINLEN:1) 2>> ${sum_file}
-
+			(java -jar ./process_reads_software/Trimmomatic-0.39/trimmomatic-0.39.jar SE ${bn}${ext} ${bn}_trimmed$ext ILLUMINACLIP:./process_reads_software/Trimmomatic-0.39/adapters/NexteraPE-PE.fa:2:30:10:8:true LEADING:3 TRAILING:3 SLIDINGWINDOW:4:22 MINLEN:1) 2>> ${sum_file}
+		
 		fi
 	# if no trimming specified, rename file to file_trimmed format so file will be recognized in next step
 	else
@@ -233,7 +236,8 @@ for i in ${!files[@]}; do
 		if [ $read_format = "se" ] ; then
 			mv ${bn}${ext} ${bn}_trimmed${ext}
 		fi
-	
+	fi
+		
 done
 
 
@@ -246,21 +250,21 @@ for i in ${!files[@]}; do
 	# use bowtie for aligning reads from DNA libraries
 	if [ $molecule = "dna" ] ; then
 		if [ $read_format = "pe" ] ; then
-			(./bowtie2-2.3.5-linux-x86_64/bowtie2 -p ${rp} -k 2 --very-sensitive --no-mixed --no-discordant -X 5000 -x ucsc_dm6/ucsc_dm6  -1 ./${bn}_trimmed_1${ext} -2 ./${bn}_trimmed_2${ext} -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
+			(./process_reads_software/bowtie2-2.3.5-linux-x86_64/bowtie2 -p ${rp} -k 2 --very-sensitive --no-mixed --no-discordant -X 5000 -x ucsc_dm6/ucsc_dm6  -1 ./${bn}_trimmed_1${ext} -2 ./${bn}_trimmed_2${ext} -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
 
 		fi
 		
 		# 
 		if [ $read_format = "se" ] ; then
 		
-			(./bowtie2-2.3.5-linux-x86_64/bowtie2 -p ${rp} -k 2 --very-sensitive -x ucsc_dm6/ucsc_dm6  -U ./${bn}_trimmed$ext -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
+			(./process_reads_software/bowtie2-2.3.5-linux-x86_64/bowtie2 -p ${rp} -k 2 --very-sensitive -x ucsc_dm6/ucsc_dm6  -U ./${bn}_trimmed$ext -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
 
 
 			fi
 	fi
 	
 	# compress aligned reads
-	./samtools view -bh -o ./${bn}.bam ./${bn}.sam 
+	./process_reads_software/samtools view -bh -o ./${bn}.bam ./${bn}.sam 
 	rm ./${bn}.sam
 done
 
@@ -327,7 +331,8 @@ fi
 
 # remove python3 installation
 rm python3.tar.gz
-rm -rf python
+rm -rf python/
+rm -rf home/
 
 
 # peak calling --------------------------------------------------------------------------
@@ -339,33 +344,41 @@ mkdir home
 export HOME=$(pwd)/home
 
 
-
 if [[ $call_peaks = TRUE ]] ; then
+	echo "starting peak calling:" >> ${sum_file}
+	
+	sample_name=(${basenames[0]%%_input*})
+	
 	if [ $assay_type = "chip_w_input" ] ; then
-		./python2.7/bin/python ./python2.7/bin/macs2 callpeak -t ${sample_name}*IP*_sorted.bam -c ${sample_group}*input*_sorted.bam -n ${sample_name} --outdir ./${sample_name}_MACS2_output -f BAM -g 1.2e8 --call-summits 
+		(./python2.7/bin/python ./python2.7/bin/macs2 callpeak -t ${sample_name}*IP*_sorted.bam -c ${sample_group}*input*_sorted.bam -n ${sample_name} --outdir ./${sample_name}_MACS2_output -f BAM -g 1.2e8 --call-summits) 2>> ${sum_file}
+	fi
+	
+	echo "peak calling done:" >> ${sum_file}
 fi
 
 # create output to return ---------------------------------------------------------------
+sample_name=(${basenames[0]})
+
 mkdir ${sample_name}_out
 
-cp *_fastqc.html ${sample_name}_out
+mv *_fastqc.html ${sample_name}_out
 
-cp ${sum_file} ${sample_name}_out
+mv ${sum_file} ${sample_name}_out
 
 if [[ $return_bams = TRUE ]] ; then
-	cp *_sorted.bam ./${sample_name}_out
+	mv *_sorted.bam ./${sample_name}_out
 fi
 
 if [[ $return_unaligned = TRUE ]] ; then
-	cp *_un.fastq.gz ./${sample_name}_out
+	mv *_un.fastq.gz ./${sample_name}_out
 fi
 
 if [[ $return_bigwigs = TRUE ]] ; then
-	cp *.bw ./${sample_name}_out
+	mv *.bw ./${sample_name}_out
 fi
 
 if [[ $call_peaks = TRUE ]] ; then
-	cp ./${sample_name}_MACS2_output/  ./${sample_name}_out
+	mv ./${sample_name}_MACS2_output/  ./${sample_name}_out
 fi
 
 
@@ -381,5 +394,4 @@ if [[ $transfer_to_gluster = TRUE ]] ; then
 fi
 
 # if transfer_to_gluster is set to FALSE, then the only single file remaining in the current directory will be the compressed output file, which will be transferred
-
 
