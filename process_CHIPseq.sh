@@ -27,9 +27,32 @@ call_peaks=TRUE # logical
 # setup ---------------------------------------------------------------------------------
 
 # detect max number of threads and set number of threads to use
-# np=$(nproc --all)
-# ((rp = $np / 2))
+np=$(nproc --all)
+((rp = $np / 2))
 
+# transfer and uncompress necessary software
+cp /mnt/gluster/tjgibson2/software/process_reads_software.tar.gz .
+cp /mnt/gluster/tjgibson2/software/python3.tar.gz .
+
+tar -xzf  process_reads_software.tar.gz
+tar -xzf python3.tar.gz
+
+export PATH=$(pwd)/python/bin:$PATH
+mkdir home
+export HOME=$(pwd)/home
+
+
+# transfer genome files from gluster and decompress
+cp /mnt/gluster/tjgibson2/genomes/ucsc_dm6_indexed.tar.gz .
+cp /mnt/gluster/tjgibson2/genomes/fb_dmel-all-r6.26.gtf.gz .
+cp /mnt/gluster/tjgibson2/genomes/good_chroms.bed .
+
+tar -xzf ucsc_dm6_indexed.tar.gz 
+gunzip fb_dmel-all-r6.26.gtf.gz
+
+# remove tar files
+rm ucsc_dm6_indexed.tar.gz 
+rm fb_dmel-all-r6.26.gtf.gz
 # file import for SRA files
 if [ input = "sra" ] ; then
 	
