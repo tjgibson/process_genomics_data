@@ -22,7 +22,7 @@ count_table=TRUE # logical
 
 # should output data be transferred to gluster or output to your home directory on the submit node?
 # WARNING: only transfer files back to the submit node if you are only transferring count tables, which are small. For large files such as BAMs, output files should be transferred back to gluster
-transfer_to_gluster=TRUE
+transfer_to_gluster=FALSE
 
 
 # setup ---------------------------------------------------------------------------------
@@ -328,7 +328,9 @@ fi
 # create output to return ---------------------------------------------------------------
 mkdir ${bn}_out
 
-cp ${bn}_fastqc.html ${bn}_out
+cp *_fastqc.html ${bn}_out
+
+cp ${sum_file} ${bn}_out
 
 if [[ $return_bams = TRUE ]] ; then
 	cp ./${bn}_sorted.bam ./${bn}_out

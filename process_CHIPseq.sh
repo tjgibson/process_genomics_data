@@ -18,11 +18,10 @@ trim_reads=TRUE # logical
 
 
 # what data do you want back
-return_bams=FALSE # logical
+return_bams=TRUE # logical
 return_unaligned=FALSE # logical
 return_bigwigs=TRUE # logical
 call_peaks=TRUE # logical
-count_table=FALSE # logical
 
 
 # setup ---------------------------------------------------------------------------------
@@ -123,7 +122,15 @@ if [ input = "local" ] ; then
 		echo ${files[*]}
 		echo ${basepaths[*]}
 		echo ${basenames[*]}
+		
+		sample_name=(${basenames[0]%%_input*})
+		
+	else
+		sample_name=${basenames[0]}
 	fi
+	
+	
+	
 
 	# transfer input files to working directory
 	for i in ${!files[@]}; do
@@ -147,10 +154,28 @@ else
 	echo "invalid input parameter. Input should be set to either 'local' or 'sra' "
 
 fi
+
+# create summary file on gluster
+sum_file="/mnt/gluster/tjgibson2/read_processing_summaries/${sample_name}.summary"
+
+
 # QC ------------------------------------------------------------------------------------
+echo "========================================================================================================================================" > ${sum_file}
+echo "starting read processing of ${read_format} RNA-seq data:" >> ${sum_file}
+date >> ${sum_file}
+echo "" >> ${sum_file}
+
+echo "running fastqc" >> ${sum_file}
+date >> ${sum_file}
+echo "" >> ${sum_file}
+
 
 # use fastQC to generate HTML formatted reports for each file
-./FastQC/fastqc *$ext
+(./process_reads_software/FastQC/fastqc *$ext)  2>> ${sum_file}
+
+echo "fastqc done" >> ${sum_file}
+date >> ${sum_file}
+echo "" >> ${sum_file}
 
 
 # trimming ------------------------------------------------------------------------------
@@ -211,19 +236,6 @@ for i in ${!files[@]}; do
 			fi
 	fi
 	
-	# use hisat2 for aligning reads from RNA/cDNA libraries
-	if [ $molecule = "rna" ] ; then
-		if [ $read_format = "pe" ] ; then
-			(./hisat2-2.1.0/hisat2 -k 2 -p ${rp} --no-mixed --no-discordant -x ./ucsc_dm6/ucsc_dm6 -1 ./${bn}_trimmed_1${ext} -2 ./${bn}_trimmed_2${ext} -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
-
-		fi
-	
-		# 
-		if [ $read_format = "se" ] ; then
-			(./hisat2-2.1.0/hisat2 -p ${rp} -k 2 -x ./ucsc_dm6/ucsc_dm6 -U ./${bn}_trimmed$ext -S ./${bn}.sam --un-gz ./${bn}_un.fastq.gz) 2>> ${sum_file}
-			
-			fi
-	fi
 	# compress aligned reads
 	./samtools view -bh -o ./${bn}.bam ./${bn}.sam 
 	rm ./${bn}.sam
@@ -242,20 +254,26 @@ for i in ${!files[@]}; do
 	bn=${basenames[$i]}
 
 	echo "${bn} input reads:" >> ${sum_file}
-	./samtools view ${bn}.bam | wc -l >> ${sum_file}
-	./samtools view -h  ${bn}.bam | grep -v "XS:i" | ./samtools view -bh -q 30 -o ./${bn}_filtered_tmp.bam
-	./samtools view -bh ${bn}_filtered_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
+	./process_reads_software/samtools view ${bn}.bam | wc -l >> ${sum_file}
+	./process_reads_software/samtools view -h  ${bn}.bam | grep -v "XS:i" | ./process_reads_software/samtools view -bh -q 30 -o ./${bn}_filtered_tmp.bam
+	./process_reads_software/samtools view -bh ${bn}_filtered_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
 
 	##Report number of filtered reads
 	echo "${bn} output reads:" >> ${sum_file}
-	./samtools view ./${bn}_filtered.bam | wc -l >> ${sum_file}
+	./process_reads_software/samtools view ./${bn}_filtered.bam | wc -l >> ${sum_file}
 
 
 	## sort and index bam file
 
 	#./samtools sort -o ${basename}_sorted.bam -@ ${rp} ${basename}_filtered.bam
-	./samtools sort -o ${bn}_sorted.bam -@ $rp ${bn}_filtered.bam
-	./samtools index ${bn}_sorted.bam
+	./process_reads_software/samtools sort -o ${bn}_sorted.bam -@ $rp ${bn}_filtered.bam
+	./process_reads_software/samtools index ${bn}_sorted.bam
+
+	# cleanup intermediate files
+	rm ${bn}.bam 
+	rm ./${bn}_filtered_tmp.bam
+	rm ${bn}_filtered.bam
+
 done
 
 echo "DONE filtering aligned reads:" >> ${sum_file}
@@ -275,31 +293,57 @@ if [[ $return_bigwigs = TRUE ]] ; then
 		date >> ${sum_file}
 		echo "" >> ${sum_file}
 
-	
-		python ./python/bin/bamCoverage --bam ${bn}_sorted.bam -o ${bn}.bw --binSize 10 -p $rp
+		(python ./python/bin/bamCoverage --bam ${bn}_sorted.bam -o ${bn}.bw --binSize 10 -p $rp)  2>> ${sum_file}
 
 		echo "DONE with bigwig conversion:" >> ${sum_file}
 		date >> ${sum_file}
 		echo "" >> ${sum_file}
+
 	done
 fi
 
 # peak calling --------------------------------------------------------------------------
 if [[ $call_peaks = TRUE ]] ; then
 	if [ $assay_type = "chip_w_input" ] ; then
-		./python2.7/bin/python ./python2.7/bin/macs2 callpeak -t ${sample_group}*IP*_filtered_sorted_good_chroms.bam -c ${sample_group}*Input*_filtered_sorted_good_chroms.bam -n ${sample_group}_filtered --outdir ./${sample_group}_MACS2_output -f BAM -g 1.2e8 --call-summits 
+		python ./python/bin/macs2 callpeak -t ${sample_name}*IP*_sorted.bam -c ${sample_group}*input*_sorted.bam -n ${sample_name} --outdir ./${sample_name}_MACS2_output -f BAM -g 1.2e8 --call-summits 
 
 fi
 
-# count table ---------------------------------------------------------------------------
-if [[ $count_table = TRUE ]] ; then
-	
-	# for experiments involving peak calling (ChIP or ATAC), create count table based on peaks
-	if [[ $call_peaks = TRUE ]] ; then
-		./subread-1.6.4-Linux-x86_64/bin/featureCounts -a peaks -o TG_count_table.txt *.bam
-	
-	else
-		./subread-1.6.4-Linux-x86_64/bin/featureCounts -a ${gtf} -o TG_count_table.txt *.bam
-	fi
+# create output to return ---------------------------------------------------------------
+mkdir ${sample_name}_out
+
+cp *_fastqc.html ${sample_name}_out
+
+cp ${sum_file} ${sample_name}_out
+
+if [[ $return_bams = TRUE ]] ; then
+	cp *_sorted.bam ./${sample_name}_out
 fi
+
+if [[ $return_unaligned = TRUE ]] ; then
+	cp *_un.fastq.gz ./${sample_name}_out
+fi
+
+if [[ $return_bigwigs = TRUE ]] ; then
+	cp *.bw ./${sample_name}_out
+fi
+
+if [[ $call_peaks = TRUE ]] ; then
+	cp ./${sample_name}_MACS2_output/  ./${sample_name}_out
+fi
+
+
+# clean up files- this will only remove files and not directories
+rm *
+
+# compress output directory
+tar -czf ${sample_name}_out.tar.gz ${sample_name}_out/
+
+# transfer output files
+if [[ $transfer_to_gluster = TRUE ]] ; then
+	mv ${sample_name}_out.tar.gz /mnt/gluster/tjgibson2/aligned_reads/
+fi
+
+# if transfer_to_gluster is set to FALSE, then the only single file remaining in the current directory will be the compressed output file, which will be transferred
+
 
