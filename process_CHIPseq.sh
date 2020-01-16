@@ -325,11 +325,24 @@ if [[ $return_bigwigs = TRUE ]] ; then
 	done
 fi
 
+# remove python3 installation
+rm python3.tar.gz
+rm -rf python
+
+
 # peak calling --------------------------------------------------------------------------
+## copy python2.7 (including MACS2) from gluster
+cp /mnt/gluster/tjgibson2/software/python2.tar.gz .
+tar -xzf python2.tar.gz
+export PATH=$(pwd)/python/bin:$PATH
+mkdir home
+export HOME=$(pwd)/home
+
+
+
 if [[ $call_peaks = TRUE ]] ; then
 	if [ $assay_type = "chip_w_input" ] ; then
-		python ./python/bin/macs2 callpeak -t ${sample_name}*IP*_sorted.bam -c ${sample_group}*input*_sorted.bam -n ${sample_name} --outdir ./${sample_name}_MACS2_output -f BAM -g 1.2e8 --call-summits 
-
+		./python2.7/bin/python ./python2.7/bin/macs2 callpeak -t ${sample_name}*IP*_sorted.bam -c ${sample_group}*input*_sorted.bam -n ${sample_name} --outdir ./${sample_name}_MACS2_output -f BAM -g 1.2e8 --call-summits 
 fi
 
 # create output to return ---------------------------------------------------------------
