@@ -10,7 +10,19 @@ bn=$4
 echo "started file transfer"
 date
 
+# copy input bam file
 cp ${in_dir}${bam} .
+
+# get exit status
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "input file transfer succeeded" >&2
+else
+	echo "input file transfer failed" >&2
+	exit 1
+fi
 
 echo "finished file transfer"
 date
@@ -58,7 +70,19 @@ java -jar ./picard.jar MarkDuplicates \
       M=./${bn}_dup_metrics.txt \
       REMOVE_DUPLICATES=true
 
+# get exit status of duplicate removal
+exit_status=$?
 
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "duplicate removal succeeded" >&2
+else
+	echo "duplicate removal failed" >&2
+	rm ./${bn}_tmp.bam*
+	exit 1
+fi
+
+# index reads with duplicates removed and get stats
 ./samtools index ./${bn}_rmdup.bam
 ./samtools idxstats ./${bn}_rmdup.bam > ${bn}_rmdup.stats
 
@@ -74,11 +98,24 @@ date
 rm ./${bn}_rmdup.bam*
 
 ## sort and index bam file
-
-#./samtools sort -o ${basename}_sorted.bam -@ ${rp} ${basename}_filtered.bam
 echo "sorting filtered reads"
 date
 ./samtools sort -o ./${bn}.bam -@ 8 ${bn}_filtered.bam 
+
+# get exit status of sorting
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "read sorting succeeded" >&2
+else
+	echo "read sorting failed" >&2
+	rm ${bn}_filtered.bam*
+	exit 1
+fi
+
+
+# index sorted reads
 ./samtools index ./${bn}.bam
 
 rm ${bn}_filtered.bam*
