@@ -1,4 +1,4 @@
-# align_paired_bowtie2.sub
+# align_PE_bowtie2.sub
 
 # set CHTC universe ----------------------------------------------------------------------
 universe = vanilla
@@ -13,7 +13,7 @@ output = align_paired_bowtie2_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
-executable = ./align_paired_bowtie2.sh
+executable = ./align_PE_bowtie2.sh
 arguments =  "'$(r1)' '$(r2)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)' '$(ref_genome)'"
 transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/bowtie2-2.3.5-linux-x86_64.tar.gz
 
