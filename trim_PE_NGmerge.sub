@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = trim_NGmerge_paired_$(Cluster).log
-error = trim_NGmerge_paired_$(Cluster).err
-output = trim_NGmerge_paired_$(Cluster).out
+log = trim_PE_NGmerge_$(Cluster).log
+error = trim_PE_NGmerge_$(Cluster).err
+output = trim_PE_NGmerge_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
