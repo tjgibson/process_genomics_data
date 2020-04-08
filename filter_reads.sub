@@ -4,7 +4,7 @@
 universe = vanilla
 
 # set job requirements -------------------------------------------------------------------
-Requirements = (Target.HasCHTCStaging == true)
+Requirements = (Target.HasCHTCStaging == true && Target.HasJava == true)
 
 # set output files -----------------------------------------------------------------------
 log = $(Cluster)_$(Process).log
