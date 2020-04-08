@@ -15,7 +15,7 @@ output = $(Cluster)_$(Process).out
 # set executable and arguments ------------------------------------------------------------
 executable = ./filter_reads.sh
 arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)'"
-transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/picard.jar
+transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/picard.jar, /home/tjgibson2/reference_data/good_chroms.bed
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
