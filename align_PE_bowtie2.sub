@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = align_paired_bowtie2_$(Cluster).log
-error = align_paired_bowtie2_$(Cluster).err
-output = align_paired_bowtie2_$(Cluster).out
+log = align_PE_bowtie2_$(Cluster).log
+error = align_PE_bowtie2_$(Cluster).err
+output = align_PE_bowtie2_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
