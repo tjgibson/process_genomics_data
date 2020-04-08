@@ -148,7 +148,7 @@ if [ $input = "local" ] ; then
 		echo ${basepaths[*]}
 		echo ${basenames[*]}
 		
-		
+		sample_name=${basenames[0]}
 		
 	else
 		sample_name=${basenames[0]}

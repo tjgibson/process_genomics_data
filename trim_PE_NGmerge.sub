@@ -1,0 +1,31 @@
+# trim_NGmerge_paired.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true)
+
+# set output files -----------------------------------------------------------------------
+log = trim_NGmerge_paired_$(Cluster).log
+error = trim_NGmerge_paired_$(Cluster).err
+output = trim_NGmerge_paired_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./trim_NGmerge_paired.sh
+arguments =  "'$(r1)' '$(r2)' '$(in_dir)' '$(out_dir)' '$(bn)'"
+transfer_input_files = /home/tjgibson2/programs/NGmerge.tar.gz
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 8GB
+request_disk = 15GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue
