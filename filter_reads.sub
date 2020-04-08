@@ -21,7 +21,7 @@ transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/progra
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 
-request resources ------------------------------------------------------------------------
+# request resources ------------------------------------------------------------------------
 request_cpus = 1
 request_memory = 16GB
 request_disk = 20GB
