@@ -1,0 +1,31 @@
+# split_ATAC_fragments.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true)
+
+# set output files -----------------------------------------------------------------------
+log = split_ATAC_fragments_$(Cluster).log
+error = split_ATAC_fragments_$(Cluster).err
+output = split_ATAC_fragments_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./split_ATAC_fragments.sh
+arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)'"
+transfer_input_files = /home/tjgibson2/programs/sambamba-0.7.0-linux-static.gz
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 16GB
+request_disk = 20GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue
