@@ -14,7 +14,7 @@ output = peaks_macs2_ind_$(Cluster).out
 
 # set executable and arguments ------------------------------------------------------------
 executable = ./peaks_macs2_ind.sh
-arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)'"
+arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)'"
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
