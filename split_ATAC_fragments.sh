@@ -12,6 +12,18 @@ date
 
 cp ${in_dir}${bam} .
 
+# get exit status for file transfer
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "input file transfer succeeded"
+else
+	echo "input file transfer failed" >&2
+	exit 1
+fi
+
+
 echo "finished file transfer"
 date
 
@@ -39,13 +51,63 @@ date
 mv ${bn}_filtered/*.bam* .
 rmdir ${bn}_filtered/
 
- # get alignment stats for aligned reads without filtering
+ # split accessible fragments
 ./sambamba view -F "template_length < 100 and template_length > -100" -f bam -t 8 -o ${bn}_accessible.bam ${bn}.bam
+
+# get exit status for file transfer
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "splitting accessible fragments succeeded"
+else
+	echo "splitting accessible fragments failed" >&2
+	exit 1
+fi
+
+# split nucleosomal fragments
 ./sambamba view -F "not (template_length < 180 and template_length > -180)" -f bam -t 8 -o ${bn}_nucleosomal.bam ${bn}.bam
 
-./sambamba sort -m 12GB -t 8 -o ${bn}_sorted_accessible.bam ${bn}_accessible.bam
-./sambamba sort -m 12GB -t 8 -o ${bn}_sorted_nucleosomal.bam ${bn}_nucleosomal.bam
+# get exit status for file transfer
+exit_status=$?
 
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "splitting nucleosomal fragments succeeded"
+else
+	echo "splitting nucleosomal fragments failed" >&2
+	exit 1
+fi
+
+
+# sort bam files with split fragments
+
+# sort accessible fragments
+./sambamba sort -m 12GB -t 8 -o ${bn}_sorted_accessible.bam ${bn}_accessible.bam
+# get exit status for file transfer
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "sorting accessible fragments succeeded"
+else
+	echo "sorting accessible fragments failed" >&2
+	exit 1
+fi
+
+
+# sort nucleosomal fragments
+./sambamba sort -m 12GB -t 8 -o ${bn}_sorted_nucleosomal.bam ${bn}_nucleosomal.bam
+# get exit status for file transfer
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "splitting nucleosomal fragments succeeded"
+else
+	echo "splitting nucleosomal fragments failed" >&2
+	exit 1
+fi
 
 
 # rename output files
@@ -56,6 +118,7 @@ mv ${bn}.bam ${bn}_total.bam
 mv ${bn}_sorted_accessible.bam ${bn}_accessible.bam
 mv ${bn}_sorted_nucleosomal.bam ${bn}_nucleosomal.bam
 
+# index BAM files for split fragments
 ./sambamba index ${bn}_total.bam
 ./sambamba index ${bn}_accessible.bam
 ./sambamba index ${bn}_nucleosomal.bam

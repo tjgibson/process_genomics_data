@@ -1,0 +1,30 @@
+# bigwigs_ind.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true)
+
+# set output files -----------------------------------------------------------------------
+log = bigwigs_ind_$(Cluster).log
+error = bigwigs_ind_$(Cluster).err
+output = bigwigs_ind_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./bigwigs_ind.sh
+arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)'"
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 8GB
+request_disk = 12GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue

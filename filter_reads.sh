@@ -18,7 +18,7 @@ exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-	echo "input file transfer succeeded" >&2
+	echo "input file transfer succeeded"
 else
 	echo "input file transfer failed" >&2
 	exit 1
@@ -75,7 +75,7 @@ exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-	echo "duplicate removal succeeded" >&2
+	echo "duplicate removal succeeded"
 else
 	echo "duplicate removal failed" >&2
 	rm ./${bn}_tmp.bam*
@@ -107,7 +107,7 @@ exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-	echo "read sorting succeeded" >&2
+	echo "read sorting succeeded"
 else
 	echo "read sorting failed" >&2
 	rm ${bn}_filtered.bam*
