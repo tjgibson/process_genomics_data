@@ -134,6 +134,7 @@ i=0
 while read line; do
  	((i=i+1))
  	echo $line
+ 	line=($line)
  	group_name=${line[0]}
  	rep_fqs=${line[1]}
  	reps=$(echo ${rep_fqs[*]} | sed 's/_S[0-9]_L???_R?_???*$ext/_split.tar.gz/g')
