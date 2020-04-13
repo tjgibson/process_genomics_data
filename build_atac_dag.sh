@@ -50,7 +50,7 @@ while read line; do
 	
 	# get basename for file
 	bn=${line%%_S[0-9]_L???_R?_???*$ext}
-	pair_base==${line%%_R?_???*$ext}
+	pair_base=${line%%_R?_???*$ext}
 	r1=${pair_base}_R1_001
 	r2=${pair_base}_R2_001
 	
@@ -124,7 +124,6 @@ while read line; do
 done <$in_files
 
 # iterate over replicate file and create dag lines for dependent steps -------------------
-if
 # create array to hold non-parallel node names
 dep_nodes=()
 
@@ -134,7 +133,7 @@ i=0
 # iterate over input files
 while read line; do
  	((i=i+1))
- 	
+ 	echo $line
  	group_name=${line[0]}
  	rep_fqs=${line[1]}
  	reps=$(echo ${rep_fqs[*]} | sed 's/_S[0-9]_L???_R?_???*$ext/_split.tar.gz/g')
