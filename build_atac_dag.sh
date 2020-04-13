@@ -137,7 +137,7 @@ while read line; do
  	
  	group_name=${line[0]}
  	rep_fqs=${line[1]}
- 	reps=$(echo ${rep_fqs[*]} | sed 's/${ext}/_split.tar.gz/g')
+ 	reps=$(echo ${rep_fqs[*]} | sed 's/_S[0-9]_L???_R?_???*$ext/_split.tar.gz/g')
  
 	# add merged_bigwig lines to dag file
 	job_name=merged_bigwigs_${i}
