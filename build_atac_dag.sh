@@ -22,6 +22,7 @@ atac_merged_bigwigs="atac_bigwigs_merged"
 
 # iterate over input files and create dag nodes for parallel steps --------------------
 # create dag file
+rm atac.dag
 touch atac.dag
 
 # initiate array for parent nodes of non-parallel steps
@@ -176,4 +177,4 @@ done <$replicates_file
 
 
 # create dot file describing DAG structure
-echo "DOT dag.dot UPDATE DONT-OVERWRITE" >> atac.dag
+echo "DOT dag.dot UPDATE" >> atac.dag

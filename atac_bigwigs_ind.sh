@@ -88,9 +88,9 @@ exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-	echo "making nucleosomal bigwig succeeded"
+	echo "making total bigwig succeeded"
 else
-	echo "making nucleosomal bigwig failed" >&2
+	echo "making total bigwig failed" >&2
 	exit 1
 fi
 

@@ -159,10 +159,9 @@ date
 # clean up unneeded files ----------------------------------------------------------------
 rm ./sambamba
 
-# remove intermediate file from previous step
+# remove intermediate file from previous step --------------------------------------------
 if [ $exit_status -eq 0 ] ; then
 	echo "removing filtered bam files"
-	rm ${in_dir}${bam}
 	rm ${in_dir}${bam}
 fi
 
