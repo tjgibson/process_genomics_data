@@ -138,6 +138,7 @@ while read line; do
  	line=($line)
  	group_name=${line[0]}
  	rep_fqs=${line[@]:1}
+ 	reps=$rep_fqs
  	
  	echo $line
  	echo $group_name
