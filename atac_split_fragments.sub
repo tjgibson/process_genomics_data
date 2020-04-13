@@ -13,7 +13,7 @@ output = split_ATAC_fragments_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
-executable = ./split_ATAC_fragments.sh
+executable = ./atac_split_fragments.sh
 arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)'"
 transfer_input_files = /home/tjgibson2/programs/sambamba-0.7.0-linux-static.gz
 
