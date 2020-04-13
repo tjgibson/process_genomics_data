@@ -136,7 +136,7 @@ while read line; do
  	echo $line
  	line=($line)
  	group_name=${line[0]}
- 	rep_fqs=${line[1]}
+ 	rep_fqs=${line[1][*]}
  	reps=$(echo ${rep_fqs[*]} | sed 's/_S[0-9]_L???_R?_???*$ext/_split.tar.gz/g')
  
 	# add merged_bigwig lines to dag file
