@@ -103,9 +103,9 @@ exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-	echo "splitting nucleosomal fragments succeeded"
+	echo "sorting nucleosomal fragments succeeded"
 else
-	echo "splitting nucleosomal fragments failed" >&2
+	echo "sorting nucleosomal fragments failed" >&2
 	exit 1
 fi
 
@@ -142,10 +142,30 @@ tar -czf ./${bn}_split.tar.gz ./${bn}_split/
 #rm ${in_dir}${bam}
 
 mv ./${bn}_split.tar.gz ${out_dir}
+# get exit status
+exit_status=$?
+
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "output file transfer succeeded"
+else
+	echo "output file transfer failed" >&2
+	exit 1
+fi
 
 echo "finished transferring output files"
 date
 
 # clean up unneeded files ----------------------------------------------------------------
 rm ./sambamba
+
+# remove intermediate file from previous step
+if [ $exit_status -eq 0 ] ; then
+	echo "removing filtered bam files"
+	rm ${in_dir}${bam}
+	rm ${in_dir}${bam}
+fi
+
+
+
 
