@@ -135,7 +135,7 @@ i=0
 while read line; do
  	((i=i+1))
  	echo $line
- 	line=$(echo ${line} | sed 's/_S[0-9]*_L[0-9]*_R1_[0-9]*.fastq.gz/_split.tar.gz/g')
+ 	line=$(echo ${line} | sed 's/.fastq.gz/_split.tar.gz/g')
  	line=($line)
  	group_name=${line[0]}
  	rep_fqs=${line[@]:1}
