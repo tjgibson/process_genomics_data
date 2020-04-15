@@ -39,7 +39,6 @@ exit_status=$?
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
   echo "NGmerge succeeded"
-  exit 0
 else
   echo "NGmerge failed"
   exit 1
@@ -70,6 +69,3 @@ else
   exit 1
 fi		
 
-
-echo "finished transferring output files"
-date
