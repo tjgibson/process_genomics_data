@@ -82,22 +82,22 @@ rm ./${bn}_sorted.bam*
 # 	exit 1
 # fi
 
-cp ./${bn}_tmp.bam ./${bn}_rmdup.bam
+#cp ./${bn}_tmp.bam ./${bn}_rmdup.bam
 
 # index reads with duplicates removed and get stats
-./samtools index ./${bn}_rmdup.bam
-./samtools idxstats ./${bn}_rmdup.bam > ${bn}_rmdup.stats
+#./samtools index ./${bn}_rmdup.bam
+#./samtools idxstats ./${bn}_rmdup.bam > ${bn}_rmdup.stats
 
 # remove input file
-rm ./${bn}_tmp.bam*
+#rm ./${bn}_tmp.bam*
 
 # filter reads to include only reads mapping to major chromosomes (excluding contigs and mitochondrial genome)
 echo "filtering reads mapping to contigs and chrM"
 date
-./samtools view -bh ./${bn}_rmdup.bam -L good_chroms.bed -o ${bn}_filtered.bam 
+./samtools view -bh ../${bn}_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
 
 # remove input file
-rm ./${bn}_rmdup.bam*
+rm ./${bn}_tmp.bam*
 
 ## sort and index bam file
 echo "sorting filtered reads"

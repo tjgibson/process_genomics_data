@@ -35,6 +35,10 @@ date
 
 tar -xzf ${bam}
 rm ${bam}
+mv ./${bn}_split/*.bam* .
+rmdir ./${bn}_split/
+rm *nucleosomal.bam*
+rm *total.bam*
 
 tar -xzf python38.tar.gz
 rm python38.tar.gz
@@ -50,9 +54,6 @@ date
 echo "started peak calling"
 date
 
-
-mv ./${bn}_split/*.bam* .
-rmdir ./${bn}_split/
 
 echo "running macs2 based on fragment size pileup for sample: $bn"
 mkdir ./${bn}_macs2
@@ -95,4 +96,5 @@ tar -czf ${bn}_macs2.tar.gz ./${bn}_macs2
 rm -r ./python/
 rm -r ./home/
 rm *.bam*
+rm ./picard.jar
 

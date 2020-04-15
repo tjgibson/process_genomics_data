@@ -50,8 +50,7 @@ while read line; do
 	echo "file extension = ${ext}"
 	
 	# get basename for file
-	bn=${line%%_1*$ext}
-	pair_base=${line%%_R?_???*$ext}
+	bn=${line%%_1$ext}
 	r1=${bn}_1
 	r2=${bn}_2
 	

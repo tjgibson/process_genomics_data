@@ -55,6 +55,7 @@ rm *_nucleosomal.bam*
 rm *_total.bam*
 
 
+
 done
 
 echo "finished file transfer"
@@ -84,6 +85,7 @@ rm ./*_accessible.bam*
 
 echo "finished merging replicate bam files"
 date
+
 
 
 # call peaks using macs2 -----------------------------------------------------------------
@@ -133,4 +135,5 @@ rm ./samtools
 rm -r ./python/
 rm -r ./home/
 rm *.bam*
+rm ./picard.jar
 
