@@ -135,5 +135,4 @@ rm ./samtools
 rm -r ./python/
 rm -r ./home/
 rm *.bam*
-rm ./picard.jar
 

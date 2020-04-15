@@ -96,5 +96,3 @@ tar -czf ${bn}_macs2.tar.gz ./${bn}_macs2
 rm -r ./python/
 rm -r ./home/
 rm *.bam*
-rm ./picard.jar
-
