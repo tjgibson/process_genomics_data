@@ -50,10 +50,10 @@ while read line; do
 	echo "file extension = ${ext}"
 	
 	# get basename for file
-	bn=${line%%_S[0-9]_L???_R?_???*$ext}
+	bn=${line%%_1*$ext}
 	pair_base=${line%%_R?_???*$ext}
-	r1=${pair_base}_R1_001
-	r2=${pair_base}_R2_001
+	r1=${bn}_1
+	r2=${bn}_2
 	
 	# add trim lines to dag file
 	job_name=trim_${i}

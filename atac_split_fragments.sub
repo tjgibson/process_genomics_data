@@ -1,4 +1,4 @@
-# split_ATAC_fragments.sub
+# atac_split_fragments.sub
 
 # set CHTC universe ----------------------------------------------------------------------
 universe = vanilla
@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = split_ATAC_fragments_$(Cluster).log
-error = split_ATAC_fragments_$(Cluster).err
-output = split_ATAC_fragments_$(Cluster).out
+log = atac_split_fragments_$(Cluster).log
+error = atac_split_fragments_$(Cluster).err
+output = atac_split_fragments_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------

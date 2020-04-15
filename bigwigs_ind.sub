@@ -1,4 +1,4 @@
-# atac_bigwigs_ind.sub
+# bigwigs_ind.sub
 
 # set CHTC universe ----------------------------------------------------------------------
 universe = vanilla
@@ -7,13 +7,13 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = atac_bigwigs_ind_$(Cluster).log
-error = atac_bigwigs_ind_$(Cluster).err
-output = atac_bigwigs_ind_$(Cluster).out
+log = bigwigs_ind_$(Cluster).log
+error = bigwigs_ind_$(Cluster).err
+output = bigwigs_ind_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
-executable = ./atac_bigwigs_ind.sh
+executable = ./bigwigs_ind.sh
 arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)'"
 
 # transfer output files ------------------------------------------------------------------

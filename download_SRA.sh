@@ -1,63 +1,48 @@
 #! /bin/bash
 
 # get parameters from input --------------------------------------------------------------
-r1=$1
-r2=$2
-in_dir=$3
-out_dir=$4
-bn=$5
-
-# transfer files -------------------------------------------------------------------------
-echo "started file transfer"
-date
-
-cp ${in_dir}${r1} .
-cp ${in_dir}${r2} .
-
-echo "finished file transfer"
-date
+sra_id=$1
+out_dir=$2
 
 # uncompress software and data -----------------------------------------------------------
 echo "started input data decompression"
 date
 
 
-tar -xzf NGmerge.tar.gz
-rm NGmerge.tar.gz
+tar -xzf sratoolkit.2.10.5-centos_linux64.tar.gz
+rm sratoolkit.2.10.5-centos_linux64.tar.gz
 
 echo "finished input data decompression"
 date
 
 # trim reads ------------------------------------------------------------------------------
-echo "started trimming reads"
+echo "started SRA download"
 date
 
-./NGmerge-master/NGmerge -a -e 20 -u 41 -n 8 -v -1 ./$r1 -2 ./$r2 -o ${bn}_trimmed
+./sratoolkit.2.10.5-centos_linux64/bin/fasterq-dump ${sra_id}
 # get exit status
 exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
-  echo "NGmerge succeeded"
+  echo "SRA download succeeded"
   exit 0
 else
-  echo "NGmerge failed"
+  echo "SRA download failed"
   exit 1
 fi		
 
 
-echo "finished trimming reads"
+echo "finished SRA download"
 date
-# remove input files ---------------------------------------------------------------------
-rm ./${r1}
-rm ./${r2}
 
 # transfer output files ------------------------------------------------------------------
 echo "started transferring output files"
 date
 
+gzip *.fastq
 
-mv ./${bn}_trimmed* ${out_dir}
+mv ./*.fastq.gz ${out_dir}
 # get exit status
 exit_status=$?
 

@@ -1,4 +1,4 @@
-# atac_bigwigs_ind.sub
+# align_SE_bowtie2.sub
 
 # set CHTC universe ----------------------------------------------------------------------
 universe = vanilla
@@ -7,14 +7,15 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = atac_bigwigs_ind_$(Cluster).log
-error = atac_bigwigs_ind_$(Cluster).err
-output = atac_bigwigs_ind_$(Cluster).out
+log = align_SE_bowtie2_$(Cluster).log
+error = align_SE_bowtie2_$(Cluster).err
+output = align_SE_bowtie2_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
-executable = ./atac_bigwigs_ind.sh
-arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)'"
+executable = ./align_SE_bowtie2.sh
+arguments =  "'$(r1)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)' '$(ref_genome)'"
+transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/bowtie2-2.3.5-linux-x86_64.tar.gz
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
@@ -22,8 +23,8 @@ when_to_transfer_output = ON_EXIT
 
 # request resources ------------------------------------------------------------------------
 request_cpus = 1
-request_memory = 8GB
-request_disk = 12GB
+request_memory = 16GB
+request_disk = 20GB
 
 
 # queue job ------------------------------------------------------------------------------

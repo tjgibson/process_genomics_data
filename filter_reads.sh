@@ -61,26 +61,28 @@ date
 rm ./${bn}_sorted.bam*
 
 # remove PCR and optical duplicates and get stats for dedplicated samples
-echo "filtering duplicates"
-date
+# echo "filtering duplicates"
+# date
+# 
+# java -jar ./picard.jar MarkDuplicates \
+#       I=./${bn}_tmp.bam \
+#       O=./${bn}_rmdup.bam \
+#       M=./${bn}_dup_metrics.txt \
+#       REMOVE_DUPLICATES=true
+# 
+# # get exit status of duplicate removal
+# exit_status=$?
+# 
+# # check exit status and exit if failed
+# if [ $exit_status -eq 0 ] ; then
+# 	echo "duplicate removal succeeded"
+# else
+# 	echo "duplicate removal failed" >&2
+# 	rm ./${bn}_tmp.bam*
+# 	exit 1
+# fi
 
-java -jar ./picard.jar MarkDuplicates \
-      I=./${bn}_tmp.bam \
-      O=./${bn}_rmdup.bam \
-      M=./${bn}_dup_metrics.txt \
-      REMOVE_DUPLICATES=true
-
-# get exit status of duplicate removal
-exit_status=$?
-
-# check exit status and exit if failed
-if [ $exit_status -eq 0 ] ; then
-	echo "duplicate removal succeeded"
-else
-	echo "duplicate removal failed" >&2
-	rm ./${bn}_tmp.bam*
-	exit 1
-fi
+cp ./${bn}_tmp.bam ./${bn}_rmdup.bam
 
 # index reads with duplicates removed and get stats
 ./samtools index ./${bn}_rmdup.bam
