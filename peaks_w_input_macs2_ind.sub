@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = $(bn)_peaks_w_input_macs2_ind_$(Cluster).log
-error = $(bn)_peaks_w_input_macs2_ind_$(Cluster).err
-output = $(bn)_peaks_w_input_macs2_ind_$(Cluster).out
+log = $(IP_bn)_peaks_w_input_macs2_ind_$(Cluster).log
+error = $(IP_bn)_peaks_w_input_macs2_ind_$(Cluster).err
+output = $(IP_bn)_peaks_w_input_macs2_ind_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------

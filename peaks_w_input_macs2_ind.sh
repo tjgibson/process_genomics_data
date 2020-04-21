@@ -92,7 +92,7 @@ echo "finished peak calling"
 date
 
 # compress output
-tar -czf ${bn}_macs2.tar.gz ./${bn}_macs2
+tar -czf ${IP_bn}_macs2.tar.gz ./${IP_bn}_macs2
 
 
 # clean up unneeded files ----------------------------------------------------------------
