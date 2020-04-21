@@ -16,6 +16,8 @@ filter_name="filter_reads"
 chip_ind_peaks="peaks_macs2_ind"
 ind_bigwigs="bigwigs_ind"
 merged_bigwigs="bigwigs_merged"
+peaks_w_input="peaks_w_input_macs2_ind"
+peaks_wo_input="peaks_wo_input_macs2_ind"
 
 
 
@@ -56,7 +58,7 @@ while read line; do
 	job_name=align_${i}
 	echo "# align reads" >> chip.dag
 	echo "JOB ${job_name} ${align_name}.sub" >> chip.dag
-	echo "VARS ${job_name} r1=\"${bn}.${ext}\"" >> chip.dag
+	echo "VARS ${job_name} r1=\"${bn}${ext}\"" >> chip.dag
 	echo "VARS ${job_name} in_dir=\"${in_dir}\"" >> chip.dag
 	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
  	echo "VARS ${job_name} bn=\"${bn}\"" >> chip.dag
@@ -154,7 +156,7 @@ while read line; do
 	job_name=peaks_w_input_${i}
 	dep_nodes+=($job_name)
 	echo "# call peaks for samples with input" >> chip.dag
-	echo "JOB ${job_name} ${merged_bigwigs}.sub" >> chip.dag
+	echo "JOB ${job_name} ${peaks_w_input}.sub" >> chip.dag
 	echo "VARS ${job_name} input=\"${input_file}\"" >> chip.dag
 	echo "VARS ${job_name} IP=\"${IP_file}\"" >> chip.dag
 	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
@@ -195,11 +197,11 @@ while read line; do
  	
  
 	# add merged_bigwig lines to dag file
-	job_name=peaks_w_input_${i}
+	job_name=peaks_wo_input_${i}
 	dep_nodes+=($job_name)
-	echo "# call peaks for samples with input" >> chip.dag
-	echo "JOB ${job_name} ${merged_bigwigs}.sub" >> chip.dag
-	echo "VARS ${job_name} IP=\"${bn}${ext}\"" >> chip.dag
+	echo "# call peaks for samples without input" >> chip.dag
+	echo "JOB ${job_name} ${peaks_wo_input}.sub" >> chip.dag
+	echo "VARS ${job_name} IP=\"${bn}_filtered.tar.gz\"" >> chip.dag
 	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> chip.dag
