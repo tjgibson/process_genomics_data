@@ -14,7 +14,7 @@ output = $(IP_bn)_peaks_w_input_macs2_ind_$(Cluster).out
 
 # set executable and arguments ------------------------------------------------------------
 executable = ./peaks_w_input_macs2_ind.sh
-arguments =  "'$(input)' '$(IP)' '$(in_dir)' '$(out_dir)' '$(ref_dir)' '$(input_bn)' '$(IP_bn)'"
+arguments =  "'$(chip_input)' '$(chip_IP)' '$(in_dir)' '$(out_dir)' '$(ref_dir)' '$(chip_input_bn)' '$(chip_IP_bn)'"
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES

@@ -145,11 +145,11 @@ while read line; do
  	
  	echo ${line[*]}
  	
- 	input_file=${line[0]}
- 	input_bn=${input_file%%_filtered.tar.gz}
+ 	chip_input_file=${line[0]}
+ 	chip_input_bn=${chip_input_file%%_filtered.tar.gz}
  	
- 	IP_file=${line[1]}
- 	IP_bn=${IP_file%%_filtered.tar.gz}
+ 	chip_IP_file=${line[1]}
+ 	chip_IP_bn=${chip_IP_file%%_filtered.tar.gz}
  	
  
 	# add merged_bigwig lines to dag file
@@ -157,13 +157,13 @@ while read line; do
 	dep_nodes+=($job_name)
 	echo "# call peaks for samples with input" >> chip.dag
 	echo "JOB ${job_name} ${peaks_w_input}.sub" >> chip.dag
-	echo "VARS ${job_name} input=\"${input_file}\"" >> chip.dag
-	echo "VARS ${job_name} IP=\"${IP_file}\"" >> chip.dag
+	echo "VARS ${job_name} chip_input=\"${chip_input_file}\"" >> chip.dag
+	echo "VARS ${job_name} chip_IP=\"${chip_IP_file}\"" >> chip.dag
 	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> chip.dag
-	echo "VARS ${job_name} input_bn=\"${input_bn}\"" >> chip.dag
-	echo "VARS ${job_name} IP_bn=\"${IP_bn}\"" >> chip.dag
+	echo "VARS ${job_name} chip_input_bn=\"${chip_input_bn}\"" >> chip.dag
+	echo "VARS ${job_name} chip_IP_bn=\"${chip_IP_bn}\"" >> chip.dag
 	
 	 
 	# define dependencies among nodes
