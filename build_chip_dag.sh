@@ -49,7 +49,7 @@ while read line; do
 	echo "file extension = ${ext}"
 	
 	# get basename for file
-	bn=${line%%_1$ext}
+	bn=${line%%$ext}
 
 	 
 	# add align lines to dag file
@@ -141,6 +141,8 @@ while read line; do
  	line=$(echo ${line} | sed 's/.fastq.gz/_filtered.tar.gz/g')
  	line=($line)
  	
+ 	echo ${line[*]}
+ 	
  	input_file=${line[0]}
  	input_bn=${input_file%%_filtered.tar.gz}
  	
@@ -158,8 +160,8 @@ while read line; do
 	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
 	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> chip.dag
-	echo "VARS ${job_name} input_bn=\"${bn}\"" >> chip.dag
-	echo "VARS ${job_name} IP_bn=\"${bn}\"" >> chip.dag
+	echo "VARS ${job_name} input_bn=\"${input_bn}\"" >> chip.dag
+	echo "VARS ${job_name} IP_bn=\"${IP_bn}\"" >> chip.dag
 	
 	 
 	# define dependencies among nodes
@@ -167,6 +169,47 @@ while read line; do
 done <$chip_w_input
 	echo "PARENT ${filter_nodes[*]} CHILD ${dep_nodes[*]}" >> chip.dag
 
+# initiate line counter
+i=0
+
+# iterate over input files
+while read line; do
+ 	((i=i+1))
+ 	echo $i
+ 	echo $line
+ 	
+ 	# check whether file extension is .fq.gz or .fastq.gz
+	if [[ $line == *.fastq.gz ]] ; then
+		ext=".fastq.gz"
+
+	elif [[ $line == *.fq.gz ]] ; then
+		ext=".fq.gz"
+	else
+		echo ".fastq or .fq file extension not detected"
+	fi
+
+	echo "file extension = ${ext}"
+	
+	# get basename for file
+	bn=${line%%$ext}
+ 	
+ 
+	# add merged_bigwig lines to dag file
+	job_name=peaks_w_input_${i}
+	dep_nodes+=($job_name)
+	echo "# call peaks for samples with input" >> chip.dag
+	echo "JOB ${job_name} ${merged_bigwigs}.sub" >> chip.dag
+	echo "VARS ${job_name} IP=\"${bn}${ext}\"" >> chip.dag
+	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
+	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
+	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> chip.dag
+	echo "VARS ${job_name} IP_bn=\"${bn}\"" >> chip.dag
+	
+	 
+	# define dependencies among nodes
+	
+done <$chip_wo_input
+	echo "PARENT ${filter_nodes[*]} CHILD ${dep_nodes[*]}" >> chip.dag
 
 # create dot file describing DAG structure
 echo "DOT dag.dot UPDATE" >> chip.dag
