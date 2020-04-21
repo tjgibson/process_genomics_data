@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true && Target.HasJava == true)
 
 # set output files -----------------------------------------------------------------------
-log = filter_reads_$(Cluster).log
-error = filter_reads_$(Cluster).err
-output = filter_reads_$(Cluster).out
+log = $(bn)_filter_reads_$(Cluster).log
+error = $(bn)_filter_reads_$(Cluster).err
+output = $(bn)_filter_reads_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------

@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = bigwigs_ind_$(Cluster).log
-error = bigwigs_ind_$(Cluster).err
-output = bigwigs_ind_$(Cluster).out
+log = $(bn)_bigwigs_ind_$(Cluster).log
+error = $(bn)_bigwigs_ind_$(Cluster).err
+output = $(bn)_bigwigs_ind_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------

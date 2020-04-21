@@ -3,10 +3,10 @@
 # get parameters -------------------------------------------------------------------------
 in_files=$1
 replicates_file=$2
-in_dir=$3
-out_dir=$4
-ref_dir=$5
-ref_genome=$6
+in_dir=/staging/tjgibson2/input_data/
+out_dir=/staging/tjgibson2/output_data/
+ref_dir=/staging/tjgibson2/reference_data/
+ref_genome=ucsc_dm6.tar.gz
 
 # set names of read processing scripts ---------------------------------------------------
 trim_name="trim_PE_NGmerge"

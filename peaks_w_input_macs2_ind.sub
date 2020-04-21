@@ -1,4 +1,4 @@
-# trim_PE_NGmerge.sh
+# peaks_w_input_macs2_ind.sub
 
 # set CHTC universe ----------------------------------------------------------------------
 universe = vanilla
@@ -7,15 +7,14 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = $(bn)_trim_PE_NGmerge_$(Cluster).log
-error = $(bn)_trim_PE_NGmerge_$(Cluster).err
-output = $(bn)_trim_PE_NGmerge_$(Cluster).out
+log = $(bn)_peaks_w_input_macs2_ind_$(Cluster).log
+error = $(bn)_peaks_w_input_macs2_ind_$(Cluster).err
+output = $(bn)_peaks_w_input_macs2_ind_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
-executable = ./trim_PE_NGmerge.sh
-arguments =  "'$(r1)' '$(r2)' '$(in_dir)' '$(out_dir)' '$(bn)'"
-transfer_input_files = /home/tjgibson2/programs/NGmerge.tar.gz
+executable = ./peaks_w_input_macs2_ind.sh
+arguments =  "'$(input)' '$(IP)' '$(in_dir)' '$(out_dir)' '$(ref_dir)' '$(input_bn)' '$(IP_bn)'"
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
@@ -23,8 +22,8 @@ when_to_transfer_output = ON_EXIT
 
 # request resources ------------------------------------------------------------------------
 request_cpus = 1
-request_memory = 8GB
-request_disk = 15GB
+request_memory = 4GB
+request_disk = 8GB
 
 
 # queue job ------------------------------------------------------------------------------

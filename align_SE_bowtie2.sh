@@ -142,12 +142,5 @@ date
 # clean up ------------------------------------------------------------------------------
 rm ./samtools
 
-# check output was written successfully before removing trimmed files from gluster
-if [ $exit_status -eq 0 ] ; then
-	echo "removing trimmed files"
-	rm ${in_dir}${r1}
-	rm ${in_dir}${r2}
-fi
-
 
 

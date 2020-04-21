@@ -7,9 +7,9 @@ universe = vanilla
 Requirements = (Target.HasCHTCStaging == true)
 
 # set output files -----------------------------------------------------------------------
-log = atac_bigwigs_merged_$(Cluster).log
-error = atac_bigwigs_merged_$(Cluster).err
-output = atac_bigwigs_merged_$(Cluster).out
+log = $(group_name)_atac_bigwigs_merged_$(Cluster).log
+error = $(group_name)_atac_bigwigs_merged_$(Cluster).err
+output = $(group_name)_atac_bigwigs_merged_$(Cluster).out
 
 
 # set executable and arguments ------------------------------------------------------------
