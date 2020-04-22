@@ -131,7 +131,6 @@ while read line; do
 	# define dependencies among nodes
 	
 done <$replicates_file
-	echo "PARENT ${filter_nodes[*]} CHILD ${dep_nodes[*]}" >> chip.dag
 
 # initiate line counter
 i=0
@@ -169,7 +168,6 @@ while read line; do
 	# define dependencies among nodes
 	
 done <$chip_w_input
-	echo "PARENT ${filter_nodes[*]} CHILD ${dep_nodes[*]}" >> chip.dag
 
 # initiate line counter
 i=0
