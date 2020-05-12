@@ -56,6 +56,9 @@ rmdir ./${bn}_split/
 
 # make bigwig file for accessible fragments
 python ./python/bin/bamCoverage --bam ${bn}_accessible.bam -o ${bn}_accessble.bw --binSize 10 -p 8
+python ./python/bin/bamCoverage --bam ${bn}_accessible.bam -o ${bn}_accessble_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python ./python/bin/bamCoverage --bam ${bn}_accessible.bam -o ${bn}_accessble_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 
 # get exit status for making bigwigs
 exit_status=$?
@@ -70,6 +73,9 @@ fi
 
 # make bigwig file for nucleosomal fragments
 python ./python/bin/bamCoverage --bam ${bn}_nucleosomal.bam -o ${bn}_nucleosomal.bw --binSize 10 -p 8
+python ./python/bin/bamCoverage --bam ${bn}_nucleosomal.bam -o ${bn}_nucleosomal_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python ./python/bin/bamCoverage --bam ${bn}_nucleosomal.bam -o ${bn}_nucleosomal_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for making bigwigs
 exit_status=$?
 
@@ -83,6 +89,9 @@ fi
 
 # make bigwig file for all fragments
 python ./python/bin/bamCoverage --bam ${bn}_total.bam -o ${bn}_total.bw --binSize 10 -p 8
+python ./python/bin/bamCoverage --bam ${bn}_total.bam -o ${bn}_total_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python ./python/bin/bamCoverage --bam ${bn}_total.bam -o ${bn}_total_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for making bigwigs
 exit_status=$?
 

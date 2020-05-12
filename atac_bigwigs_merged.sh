@@ -100,6 +100,9 @@ date
 
 # make bigwigs from accessible fragments
 python/bin/python python/bin/bamCoverage --bam ${group_name}_accessible_merged.bam -o ${group_name}_accessble.bw --binSize 10 -p 8
+python/bin/python python/bin/bamCoverage --bam ${group_name}_accessible_merged.bam -o  ${group_name}_accessble_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python/bin/python python/bin/bamCoverage --bam ${group_name}_accessible_merged.bam -o  ${group_name}_accessble_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for peak calling
 exit_status=$?
 
@@ -113,6 +116,9 @@ fi
 
 # make bigwigs from nucleosomal fragments
 python/bin/python python/bin/bamCoverage --bam ${group_name}_nucleosomal_merged.bam -o ${group_name}_nucleosomal.bw --binSize 10 -p 8
+python/bin/python python/bin/bamCoverage --bam ${group_name}_nucleosomal_merged.bam -o  ${group_name}_nucleosomal_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python/bin/python python/bin/bamCoverage --bam ${group_name}_nucleosomal_merged.bam -o  ${group_name}_nucleosomal_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for peak calling
 exit_status=$?
 
@@ -126,6 +132,9 @@ fi
 
 # make bigwigs from all fragments
 python/bin/python python/bin/bamCoverage --bam ${group_name}_total_merged.bam -o ${group_name}_total.bw --binSize 10 -p 8
+python/bin/python python/bin/bamCoverage --bam ${group_name}_total_merged.bam -o ${group_name}_total_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python/bin/python python/bin/bamCoverage --bam ${group_name}_total_merged.bam -o ${group_name}_total_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for peak calling
 exit_status=$?
 

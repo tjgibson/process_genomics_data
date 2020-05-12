@@ -89,6 +89,9 @@ date
 
 # make bigwigs from accessible fragments
 python/bin/python python/bin/bamCoverage --bam ${group_name}_merged.bam -o ${group_name}.bw --binSize 10 -p 8
+python/bin/python python/bin/bamCoverage --bam ${group_name}_merged.bam -o ${group_name}_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python/bin/python python/bin/bamCoverage --bam ${group_name}_merged.bam -o ${group_name}_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
+
 # get exit status for peak calling
 exit_status=$?
 

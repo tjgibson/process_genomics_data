@@ -56,6 +56,8 @@ rmdir ./${bn}_filtered/
 
 # make bigwig file for accessible fragments
 python ./python/bin/bamCoverage --bam ${bn}.bam -o ${bn}.bw --binSize 10 -p 8
+python ./python/bin/bamCoverage --bam ${bn}.bam -o ${bn}_rpkm.bw --binSize 10 -p 8  --normalizeUsing RPKM
+python ./python/bin/bamCoverage --bam ${bn}.bam -o ${bn}_cpm.bw --binSize 10 -p 8  --normalizeUsing CPM
 
 # get exit status for making bigwigs
 exit_status=$?
@@ -70,7 +72,7 @@ fi
 
 
 # compress output
-tar -czf ${bn}.bw.tar.gz ${bn}.bw
+tar -czf ${bn}.bw.tar.gz *.bw
 
 
 
