@@ -1,0 +1,31 @@
+# align_PE_hisat2.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true)
+
+# set output files -----------------------------------------------------------------------
+log = $(bn)_align_PE_hisat2_$(Cluster).log
+error = $(bn)_align_PE_hisat2_$(Cluster).err
+output = $(bn)_align_PE_hisat2_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./align_PE_hisat2.sh
+arguments =  "'$(r1)' '$(r2)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(ref_dir)' '$(ref_genome)'"
+transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/hisat2-2.1.0.tar.gz
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 16GB
+request_disk = 20GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue

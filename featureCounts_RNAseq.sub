@@ -1,0 +1,31 @@
+# featureCounts_RNAseq.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true && Target.HasJava == true)
+
+# set output files -----------------------------------------------------------------------
+log = $(bn)_featureCounts_RNAseq_$(Cluster).log
+error = $(bn)_featureCounts_RNAseq_$(Cluster).err
+output = $(bn)_featureCounts_RNAseq_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./featureCounts_RNAseq.sh
+arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(gene_annotation)'"
+transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/picard.jar, /home/tjgibson2/reference_data/fb_dmel-all-r6.26.gtf.gz
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 8GB
+request_disk = 12GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue
