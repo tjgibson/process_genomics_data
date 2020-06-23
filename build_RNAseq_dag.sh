@@ -75,7 +75,7 @@ while read line; do
 	filter_nodes+=($job_name)
 	echo "# filter reads" >> RNAseq.dag
 	echo "JOB ${job_name} ${count_table}.sub" >> RNAseq.dag
-	echo "VARS ${job_name} bam=\"${bn}_aligned.tar.gz\"" >> RNAseq.dag
+	echo "VARS ${job_name} bam=\"${bn}_filtered.tar.gz\"" >> RNAseq.dag
 	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> RNAseq.dag
 	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> RNAseq.dag
  	echo "VARS ${job_name} bn=\"${bn}\"" >> RNAseq.dag 	
