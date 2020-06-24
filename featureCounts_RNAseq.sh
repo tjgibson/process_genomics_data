@@ -35,7 +35,7 @@ tar -xzf ${bam}
 rm ${bam}
 
 gunzip fb_dmel-all-r6.26.gtf.gz
-tar - xzf subread-1.6.4-Linux-x86_64.tar.gz
+tar -xzf subread-1.6.4-Linux-x86_64.tar.gz
 
 echo "finished file decompression"
 date
@@ -44,12 +44,24 @@ date
 echo "started read filtering"
 date
 
-mv ${bn}_aligned/*.bam* .
-rm -r ${bn}_aligned/
+mv ${bn}_filtered/*.bam* .
+rm -r ${bn}_filtered/
 
 subread-1.6.4-Linux-x86_64/bin/featureCounts -a fb_dmel-all-r6.26.gtf  -o ${bn}_count_table.txt ${bn}.bam
 
+# get exit status
+exit_status=$?
 
+# check exit status and exit if failed
+if [ $exit_status -eq 0 ] ; then
+	echo "featureCounts succeeded"
+else
+	echo "featureCounts failed" >&2
+	rm *.bam*
+	rm -r ./subread-1.6.4-Linux-x86_64
+	rm subread-1.6.4-Linux-x86_64.tar.gz
+	exit 1
+fi
 
 # clean up unneeded files ----------------------------------------------------------------
 rm *.bam

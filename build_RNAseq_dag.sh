@@ -72,7 +72,6 @@ while read line; do
 
 	# add count table lines to dag file
 	job_name=count_table_${i}
-	filter_nodes+=($job_name)
 	echo "# filter reads" >> RNAseq.dag
 	echo "JOB ${job_name} ${count_table}.sub" >> RNAseq.dag
 	echo "VARS ${job_name} bam=\"${bn}_filtered.tar.gz\"" >> RNAseq.dag
