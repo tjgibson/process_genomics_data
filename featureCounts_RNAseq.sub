@@ -15,7 +15,7 @@ output = $(bn)_featureCounts_RNAseq_$(Cluster).out
 # set executable and arguments ------------------------------------------------------------
 executable = ./featureCounts_RNAseq.sh
 arguments =  "'$(bam)' '$(in_dir)' '$(out_dir)' '$(bn)' '$(gene_annotation)'"
-transfer_input_files = /home/tjgibson2/programs/samtools, /home/tjgibson2/programs/picard.jar, /home/tjgibson2/reference_data/fb_dmel-all-r6.26.gtf.gz
+transfer_input_files = /home/tjgibson2/programs/subread-1.6.4-Linux-x86_64.tar.gz, /home/tjgibson2/reference_data/fb_dmel-all-r6.26.gtf.gz
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
