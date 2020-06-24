@@ -41,7 +41,7 @@ echo "finished file decompression"
 date
 
 # generate read count table ------------------------------------------------------------------------------
-echo "started read filtering"
+echo "started featureCounts"
 date
 
 mv ${bn}_filtered/*.bam* .
