@@ -52,32 +52,32 @@ while read line; do
 	echo "file extension = ${ext}"
 	
 	# get basename for file
-	bn=${line%%$ext}
+	bn=${line%%_R1_001$ext}
 	r1=${bn}_R1_001
 	r2=${bn}_R2_001
 
 	 
 	# add trim lines to dag file
 	job_name=trim_${i}
-	echo "# trim reads" >> atac.dag
-	echo "JOB ${job_name} ${trim_name}.sub" >> atac.dag
-	echo "VARS ${job_name} r1=\"${r1}$ext\"" >> atac.dag
-	echo "VARS ${job_name} r2=\"${r2}$ext\"" >> atac.dag
-	echo "VARS ${job_name} in_dir=\"${in_dir}\"" >> atac.dag
-	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> atac.dag
- 	echo "VARS ${job_name} bn=\"${bn}\"" >> atac.dag
+	echo "# trim reads" >> chip.dag
+	echo "JOB ${job_name} ${trim_name}.sub" >> chip.dag
+	echo "VARS ${job_name} r1=\"${r1}$ext\"" >> chip.dag
+	echo "VARS ${job_name} r2=\"${r2}$ext\"" >> chip.dag
+	echo "VARS ${job_name} in_dir=\"${in_dir}\"" >> chip.dag
+	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
+ 	echo "VARS ${job_name} bn=\"${bn}\"" >> chip.dag
  
 	# add align lines to dag file
 	job_name=align_${i}
-	echo "# align reads" >> atac.dag
-	echo "JOB ${job_name} ${align_name}.sub" >> atac.dag
-	echo "VARS ${job_name} r1=\"${bn}_trimmed_1.fastq.gz\"" >> atac.dag
-	echo "VARS ${job_name} r2=\"${bn}_trimmed_2.fastq.gz\"" >> atac.dag
-	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> atac.dag
-	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> atac.dag
- 	echo "VARS ${job_name} bn=\"${bn}\"" >> atac.dag
-	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> atac.dag
-	echo "VARS ${job_name} ref_genome=\"${ref_genome}\"" >> atac.dag
+	echo "# align reads" >> chip.dag
+	echo "JOB ${job_name} ${align_name}.sub" >> chip.dag
+	echo "VARS ${job_name} r1=\"${bn}_trimmed_1.fastq.gz\"" >> chip.dag
+	echo "VARS ${job_name} r2=\"${bn}_trimmed_2.fastq.gz\"" >> chip.dag
+	echo "VARS ${job_name} in_dir=\"${out_dir}\"" >> chip.dag
+	echo "VARS ${job_name} out_dir=\"${out_dir}\"" >> chip.dag
+ 	echo "VARS ${job_name} bn=\"${bn}\"" >> chip.dag
+	echo "VARS ${job_name} ref_dir=\"${ref_dir}\"" >> chip.dag
+	echo "VARS ${job_name} ref_genome=\"${ref_genome}\"" >> chip.dag
 
 	# add filter lines to dag file
 	job_name=filter_${i}
