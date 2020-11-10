@@ -17,8 +17,8 @@ filter_name="filter_reads"
 chip_ind_peaks="peaks_macs2_ind"
 ind_bigwigs="bigwigs_ind"
 merged_bigwigs="bigwigs_merged"
-peaks_w_input="peaks_w_input_macs2_ind"
-peaks_wo_input="peaks_wo_input_macs2_ind"
+peaks_w_input="PE_peaks_w_input_macs2_ind"
+peaks_wo_input="PE_peaks_wo_input_macs2_ind"
 
 
 
@@ -102,6 +102,7 @@ while read line; do
 	
 	 
 	# define dependencies among nodes
+	echo "PARENT trim_${i} CHILD align_${i}" >> chip.dag
 	echo "PARENT align_${i} CHILD filter_${i}" >> chip.dag
 	echo "PARENT filter_${i} CHILD ind_bigwigs_${i}" >> chip.dag
  

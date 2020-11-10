@@ -1,0 +1,30 @@
+# PE_peaks_w_input_macs2_ind.sub
+
+# set CHTC universe ----------------------------------------------------------------------
+universe = vanilla
+
+# set job requirements -------------------------------------------------------------------
+Requirements = (Target.HasCHTCStaging == true)
+
+# set output files -----------------------------------------------------------------------
+log = $(chip_IP_bn)_PE_peaks_w_input_macs2_ind_$(Cluster).log
+error = $(chip_IP_bn)_PE_peaks_w_input_macs2_ind_$(Cluster).err
+output = $(chip_IP_bn)_PE_peaks_w_input_macs2_ind_$(Cluster).out
+
+
+# set executable and arguments ------------------------------------------------------------
+executable = ./PE_peaks_w_input_macs2_ind.sh
+arguments =  "'$(chip_input)' '$(chip_IP)' '$(in_dir)' '$(out_dir)' '$(ref_dir)' '$(chip_input_bn)' '$(chip_IP_bn)'"
+
+# transfer output files ------------------------------------------------------------------
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+# request resources ------------------------------------------------------------------------
+request_cpus = 1
+request_memory = 4GB
+request_disk = 8GB
+
+
+# queue job ------------------------------------------------------------------------------
+queue
