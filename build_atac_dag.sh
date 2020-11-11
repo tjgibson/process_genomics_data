@@ -49,10 +49,20 @@ while read line; do
 
 	echo "file extension = ${ext}"
 	
-	# get basename for file
-	bn=${line%%_1$ext}
-	r1=${bn}_1
-	r2=${bn}_2
+	# check naming convention for paired end reads
+	if [[ $line == *_1$ext ]] ; then
+		bn=${line%%_1$ext}
+		r1=${bn}_1
+		r2=${bn}_2
+
+	elif [[ $line == *_R1_001$ext ]] ; then
+		bn=${line%%_R1_001$ext}
+		r1=${bn}_R1_001
+		r2=${bn}_R2_001
+	else
+		echo "failed to parse file names for paired-end reads"
+	fi
+
 	
 	# add trim lines to dag file
 	job_name=trim_${i}
