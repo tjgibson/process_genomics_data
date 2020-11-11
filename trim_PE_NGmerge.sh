@@ -41,6 +41,8 @@ if [ $exit_status -eq 0 ] ; then
   echo "NGmerge succeeded"
 else
   echo "NGmerge failed"
+	rm ./${r1}
+	rm ./${r2}
   exit 1
 fi		
 

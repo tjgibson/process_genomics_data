@@ -157,7 +157,7 @@ while read line; do
 	echo "VARS ${job_name} group_name=\"${group_name}\"" >> atac.dag
 	echo "VARS ${job_name} replicates=\"${reps}\"" >> atac.dag
 	
-	# add ind_peaks lines to dag file
+	# add merged peaks lines to dag file
 	job_name=merged_peaks_${i}
 	dep_nodes+=($job_name)
 	echo "# call peaks for merged replicates" >> atac.dag
