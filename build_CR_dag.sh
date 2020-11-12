@@ -144,7 +144,18 @@ i=0
 while read line; do
  	((i=i+1))
  	echo $line
- 	line=$(echo ${line} | sed 's/_1.fastq.gz/_split.tar.gz/g')
+ 	
+ 		# check naming convention for paired end reads
+	if [[ $line == *_1$ext ]] ; then
+
+		line=$(echo ${line} | sed 's/_1.fastq.gz/_split.tar.gz/g')
+	elif [[ $line == *_R1_001$ext ]] ; then
+		line=$(echo ${line} | sed 's/_R1_001.fastq.gz/_split.tar.gz/g')
+	else
+		echo "failed to parse file names for paired-end reads"
+	fi
+
+ 
  	line=($line)
  	group_name=${line[0]}
  	rep_fqs=${line[@]:1}
