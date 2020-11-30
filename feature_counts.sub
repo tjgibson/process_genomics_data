@@ -15,7 +15,7 @@ output = $(bn)_feature_counts_$(Cluster).out
 # set executable and arguments ------------------------------------------------------------
 executable = ./feature_counts.sh
 arguments =  "'$(bam)' '$(SAF_file)' '$(in_dir)'"
-transfer_input_files = /home/tjgibson2/programs/subread-1.6.4-Linux-x86_64.tar.gz
+transfer_input_files = /home/tjgibson2/programs/subread-1.6.4-Linux-x86_64.tar.gz, /home/tjgibson2/reference_data/ucsc_dm6_500bp_windows.saf
 
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES

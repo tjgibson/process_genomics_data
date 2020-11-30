@@ -15,7 +15,7 @@ output = $(bn)_download_SRA_$(Cluster).out
 # set executable and arguments ------------------------------------------------------------
 executable = ./download_SRA.sh
 arguments =  "'$(sra_id)' '$(out_dir)'"
-transfer_input_files = /home/tjgibson2/programs/sratoolkit.2.10.5-centos_linux64.tar.gz
+transfer_input_files = /home/tjgibson2/programs/sratoolkit.2.9.6-1-centos_linux64.tar.gz
 # transfer output files ------------------------------------------------------------------
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT

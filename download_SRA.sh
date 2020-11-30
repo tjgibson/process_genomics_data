@@ -9,8 +9,8 @@ echo "started input data decompression"
 date
 
 
-tar -xzf sratoolkit.2.10.5-centos_linux64.tar.gz
-rm sratoolkit.2.10.5-centos_linux64.tar.gz
+tar -xzf sratoolkit.2.9.6-1-centos_linux64.tar.gz
+rm sratoolkit.2.9.6-1-centos_linux64.tar.gz
 
 echo "finished input data decompression"
 date
@@ -19,14 +19,16 @@ date
 echo "started SRA download"
 date
 
-./sratoolkit.2.10.5-centos_linux64/bin/fasterq-dump ${sra_id}
+#./sratoolkit.2.9.6-1-centos_linux64/bin/fasterq-dump ${sra_id}
+./sratoolkit.2.9.6-1-centos_linux64/bin/prefetch -O ./ ${sra_id}
+./sratoolkit.2.9.6-1-centos_linux64/bin/fasterq-dump ${sra_id}.sra
+
 # get exit status
 exit_status=$?
 
 # check exit status and exit if failed
 if [ $exit_status -eq 0 ] ; then
   echo "SRA download succeeded"
-  exit 0
 else
   echo "SRA download failed"
   exit 1
