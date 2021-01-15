@@ -94,10 +94,12 @@ rm ./${bn}_sorted.bam*
 # filter reads to include only reads mapping to major chromosomes (excluding contigs and mitochondrial genome)
 echo "filtering reads mapping to contigs and chrM"
 date
-./samtools view -bh ./${bn}_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
+cat good_chroms.bed | cut -f 1,3 > header
+./samtools view ./${bn}_tmp.bam -L good_chroms.bed | ./samtools view -b -t header -o ${bn}_filtered.bam 
 
 # remove input file
 rm ./${bn}_tmp.bam*
+rm ./header
 
 ## sort and index bam file
 echo "sorting filtered reads"

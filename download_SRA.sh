@@ -42,6 +42,8 @@ date
 echo "started transferring output files"
 date
 
+rm ${sra_id}.sra
+mv ${sra_id}.sra.fastq ${sra_id}.fastq
 gzip *.fastq
 
 mv ./*.fastq.gz ${out_dir}

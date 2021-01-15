@@ -94,8 +94,8 @@ rm ./${bn}_sorted.bam*
 # filter reads to include only reads mapping to major chromosomes (excluding contigs and mitochondrial genome)
 echo "filtering reads mapping to contigs and chrM"
 date
-#./samtools view -bh ./${bn}_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
-mv ./${bn}_tmp.bam ${bn}_filtered.bam 
+./samtools view -bh ./${bn}_tmp.bam -L good_chroms.bed -o ${bn}_filtered.bam 
+# mv ./${bn}_tmp.bam ${bn}_filtered.bam 
 
 
 ## sort and index bam file
