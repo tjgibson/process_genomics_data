@@ -24,7 +24,7 @@ when_to_transfer_output = ON_EXIT
 # request resources ------------------------------------------------------------------------
 request_cpus = 1
 request_memory = 8GB
-request_disk = 15GB
+request_disk = 40GB
 
 
 # queue job ------------------------------------------------------------------------------
